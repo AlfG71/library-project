@@ -41,7 +41,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-mongoose
+mongoose  // persistent connection to mongodb
   .connect(process.env.MONGODB_URI)
   .then(x => {
     console.log(`Connected to Mongo database: "${x.connections[0].name}"`);

@@ -48,17 +48,70 @@ router.post('/create', (req, res, next) => {
     title,
     description,
     author,
-    rating
+    rating,
   })
-  .then((createdBook) => {
-    console.log("This is the new book ===>", createdBook)
-    res.redirect(`/books/book-details/${createdBook._id}`)
-  })
-  .catch((err) => {
-    console.log(err)
-    next(err)
-  })
+    .then((createdBook) => {
+      console.log("This is the new book ===>", createdBook);
+      res.redirect(`/books/book-details/${createdBook._id}`);
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 
+})
+
+router.get('/edit/:bookId', (req, res, next) => {
+  const { bookId } = req.params;
+
+  Book.findById(bookId)
+      .then((foundBook) => {
+        console.log("Here is the book from the DB", foundBook)
+        res.render('books/book-edit.hbs', foundBook)
+      })
+      .catch((err) => {
+        console.log(err)
+        next(err)
+      })
+})
+
+router.post('/edit/:bookId', (req, res, netx) => {
+  let { bookId } = req.params;
+
+  let { title, description, author, rating } = req.body;
+
+  Book.findByIdAndUpdate(
+    bookId,
+    {
+      title,
+      description,
+      author,
+      rating,
+    },
+    { new: true }
+  )
+    .then((updateBook) => {
+      console.log("Book after update ===>", updateBook);
+      res.redirect(`/books/book-details/${updateBook._id}`)
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
+})
+
+router.post('/delete/:bookId', (req, res, next) => {
+  let { bookId } = req.params;
+
+  Book.findByIdAndRemove(bookId)
+    .then((result) => {
+      console.log("Deletion result ===>", result);
+      res.redirect('/books')
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 })
 
 module.exports = router;

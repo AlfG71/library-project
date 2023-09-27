@@ -7,3 +7,7 @@
 <p>Rating: {{rating}}/10</p>
 <hr>
 <a href="/books">Back</a>
+<a href="/books/edit/{{_id}}">Edit</a>
+<form action="/books/delete/{{_id}}" method="POST">
+  <button>Delete</button>
+</form>
